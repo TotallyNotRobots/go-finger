@@ -1,5 +1,5 @@
 # Load golang image
-FROM golang:1.21-alpine as builder
+FROM golang:1.24-alpine as builder
 
 RUN apk add make
 
@@ -35,7 +35,7 @@ RUN --mount=type=cache,target=/tmp/.go-build-cache \
   make build VERSION=$VERSION
 
 # Now create a new image with just the binary
-FROM gcr.io/distroless/static-debian11:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot
 
 WORKDIR /app
 
