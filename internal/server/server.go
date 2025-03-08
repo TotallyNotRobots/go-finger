@@ -68,7 +68,7 @@ func StartServer(ctx context.Context, cfg *config.Config, fingers webfingers.Web
 			return egCtx
 		}
 
-		return srv.ListenAndServe() //nolint:wrapcheck // We wrap the error in the errgroup
+		return srv.ListenAndServe()
 	})
 	// Gracefully shutdown the server when the context is done
 	eg.Go(func() error {
@@ -80,7 +80,7 @@ func StartServer(ctx context.Context, cfg *config.Config, fingers webfingers.Web
 		// the server to shutdown if the context is canceled.
 		noCancelCtx := context.WithoutCancel(egCtx)
 
-		return srv.Shutdown(noCancelCtx) //nolint:wrapcheck // We wrap the error in the errgroup
+		return srv.Shutdown(noCancelCtx)
 	})
 
 	// Log when the server is fully shutdown

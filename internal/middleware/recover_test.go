@@ -38,7 +38,7 @@ func TestRecoverer(t *testing.T) {
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequestWithContext(ctx, http.MethodGet, "/", http.NoBody)
 
-		h := middleware.Recoverer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		h := middleware.Recoverer(http.HandlerFunc(func(_ http.ResponseWriter, _ *http.Request) {
 			panic("test")
 		}))
 
@@ -61,7 +61,7 @@ func TestRecoverer(t *testing.T) {
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequestWithContext(ctx, http.MethodGet, "/", http.NoBody)
 
-		h := middleware.Recoverer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		h := middleware.Recoverer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}))
 

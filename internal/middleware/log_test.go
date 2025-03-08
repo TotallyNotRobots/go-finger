@@ -30,7 +30,7 @@ func TestRequestLogger(t *testing.T) {
 		t.Error("logger logged before request")
 	}
 
-	middleware.RequestLogger(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	middleware.RequestLogger(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})).ServeHTTP(w, r)
 

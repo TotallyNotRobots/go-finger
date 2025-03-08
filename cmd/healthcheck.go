@@ -16,10 +16,10 @@ func newHealthcheckCmd(cfg *config.Config) *ff.Command {
 		Name:      "healthcheck",
 		Usage:     "healthcheck [flags]",
 		ShortHelp: "Check if the server is running",
-		Exec: func(ctx context.Context, args []string) error {
+		Exec: func(ctx context.Context, _ []string) error {
 			// Create a new client
 			client := &http.Client{
-				Timeout: 5 * time.Second, //nolint:gomnd // We want to use a constant
+				Timeout: 5 * time.Second, //nolint:mnd // We want to use a constant
 			}
 
 			// Create a new request

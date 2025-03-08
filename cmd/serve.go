@@ -19,7 +19,7 @@ func newServerCmd(cfg *config.Config) *ff.Command {
 		Name:      "serve",
 		Usage:     "serve [flags]",
 		ShortHelp: "Start the webfinger server",
-		Exec: func(ctx context.Context, args []string) error {
+		Exec: func(ctx context.Context, _ []string) error {
 			// Create a logger and add it to the context
 			l := log.NewLogger(os.Stderr, cfg)
 			ctx = log.WithLogger(ctx, l)
