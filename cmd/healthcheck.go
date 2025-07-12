@@ -44,7 +44,7 @@ func newHealthcheckCmd(cfg *config.Config) *ff.Command {
 
 			// Check the response
 			if resp.StatusCode != http.StatusOK {
-				return fmt.Errorf("server returned status %d", resp.StatusCode) //nolint:goerr113 // We want to return an error
+				return fmt.Errorf("server returned status %d", resp.StatusCode) //nolint:err113 // We want to return an error
 			}
 
 			return nil

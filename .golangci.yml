@@ -1,41 +1,32 @@
+version: "2"
 linters:
-  disable-all: true
+  default: none
   enable:
     - asciicheck
     - bidichk
     - bodyclose
     - containedctx
     - contextcheck
-    # - cyclop
+    - copyloopvar
     - decorder
-    # - dogsled
-    # - dupl
     - durationcheck
+    - err113
     - errcheck
     - errchkjson
     - errname
     - errorlint
     - exhaustive
-    - copyloopvar
     - forbidigo
     - forcetypeassert
-    - gci
     - gochecknoglobals
     - gochecknoinits
-    # - gocognit
     - goconst
     - gocritic
     - gocyclo
     - godot
-    - err113
-    - gofmt
-    - gofumpt
     - goheader
-    - goimports
-    - mnd
     - gomodguard
     - gosec
-    - gosimple
     - gosmopolitan
     - govet
     - importas
@@ -46,6 +37,7 @@ linters:
     - makezero
     - mirror
     - misspell
+    - mnd
     - musttag
     - nakedret
     - nestif
@@ -63,41 +55,60 @@ linters:
     - rowserrcheck
     - sqlclosecheck
     - staticcheck
-    - stylecheck
     - tagalign
     - tagliatelle
     - testpackage
     - thelper
     - tparallel
-    - typecheck
     - unconvert
     - unparam
     - unused
     - usestdlibvars
-    # - varnamelen
     - wastedassign
     - whitespace
     - wrapcheck
     - wsl
-
-linters-settings:
-  varnamelen:
-    min-name-length: 2
-    ignore-decls:
-      - l *zap.Logger
-      - l *slog.Logger
-      - l slog.Logger
-      - w http.ResponseWriter
-      - r chi.Router
-      - fs *flag.FlagSet
-      - r *http.Request
-      - eg *errgroup.Group
-      - sw *statuswriter.StatusWriter
-      - db *bun.DB
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - style
-      - performance
-      - experimental
-      - opinionated
+  settings:
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+        - experimental
+        - opinionated
+    varnamelen:
+      min-name-length: 2
+      ignore-decls:
+        - l *zap.Logger
+        - l *slog.Logger
+        - l slog.Logger
+        - w http.ResponseWriter
+        - r chi.Router
+        - fs *flag.FlagSet
+        - r *http.Request
+        - eg *errgroup.Group
+        - sw *statuswriter.StatusWriter
+        - db *bun.DB
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

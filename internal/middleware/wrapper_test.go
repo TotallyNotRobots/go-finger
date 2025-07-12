@@ -40,7 +40,7 @@ func TestResponseWrapper_Status(t *testing.T) {
 type FailWriter struct{}
 
 func (w *FailWriter) Write(_ []byte) (int, error) {
-	return 0, fmt.Errorf("error") //nolint:goerr113 // We want to return an error
+	return 0, fmt.Errorf("error") //nolint:err113 // We want to return an error
 }
 
 func (w *FailWriter) Header() http.Header {
