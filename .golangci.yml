@@ -15,7 +15,6 @@ linters:
     - nonamedreturns
     - perfsprint
     - revive
-    - usetesting
     - varnamelen
     - wsl
   settings:

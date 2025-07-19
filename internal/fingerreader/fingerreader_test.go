@@ -16,7 +16,7 @@ import (
 func newTempFile(t *testing.T, content string) (name string, remove func()) {
 	t.Helper()
 
-	f, err := os.CreateTemp("", "finger-test")
+	f, err := os.CreateTemp(t.TempDir(), "finger-test")
 	if err != nil {
 		t.Fatalf("error creating temp file: %v", err)
 	}
