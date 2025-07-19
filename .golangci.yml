@@ -1,73 +1,23 @@
 version: "2"
 linters:
-  default: none
-  enable:
-    - asciicheck
-    - bidichk
-    - bodyclose
-    - containedctx
-    - contextcheck
-    - copyloopvar
-    - decorder
-    - durationcheck
-    - err113
+  default: all
+  disable:
+    - cyclop
+    - depguard
     - errcheck
-    - errchkjson
-    - errname
-    - errorlint
-    - exhaustive
-    - forbidigo
-    - forcetypeassert
-    - gochecknoglobals
-    - gochecknoinits
-    - goconst
-    - gocritic
-    - gocyclo
-    - godot
-    - goheader
-    - gomodguard
-    - gosec
-    - gosmopolitan
-    - govet
-    - importas
-    - ineffassign
-    - ireturn
-    - loggercheck
-    - maintidx
-    - makezero
-    - mirror
-    - misspell
-    - mnd
-    - musttag
-    - nakedret
-    - nestif
-    - nilerr
-    - nilnil
-    - nlreturn
-    - noctx
+    - exhaustruct
+    - fatcontext
+    - funlen
+    - intrange
+    - lll
+    - noinlineerr
     - nolintlint
-    - nosprintfhostport
-    - prealloc
-    - predeclared
-    - promlinter
-    - reassign
+    - nonamedreturns
+    - perfsprint
     - revive
-    - rowserrcheck
-    - sqlclosecheck
-    - staticcheck
-    - tagalign
-    - tagliatelle
-    - testpackage
-    - thelper
-    - tparallel
-    - unconvert
-    - unparam
-    - unused
-    - usestdlibvars
-    - wastedassign
-    - whitespace
-    - wrapcheck
-    - wsl_v5
+    - usetesting
+    - varnamelen
+    - wsl
   settings:
     gocritic:
       enabled-tags:
@@ -94,25 +44,21 @@ linters:
       allow-whole-block: false
       branch-max-lines: 2
   exclusions:
-    generated: lax
-    presets:
-      - comments
-      - common-false-positives
-      - legacy
-      - std-error-handling
-    paths:
-      - third_party$
-      - builtin$
-      - examples$
+    generated: disable
 formatters:
   enable:
     - gci
     - gofmt
     - gofumpt
     - goimports
+    - golines
+    - swaggo
   exclusions:
-    generated: lax
-    paths:
-      - third_party$
-      - builtin$
-      - examples$
+    generated: disable
+  settings:
+    golines:
+      max-len: 120
+      tab-len: 2
+      shorten-comments: true
+      reformat-tags: true
+      chain-split-dots: true

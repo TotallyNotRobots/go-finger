@@ -60,7 +60,9 @@ func trapSignalsCrossPlatform(cancel context.CancelFunc) {
 				os.Exit(1)
 			}
 
-			fmt.Printf("\nGracefully shutting down. Press Ctrl+C again to force quit\n") //nolint:forbidigo // We want to print to stdout
+			fmt.Printf( //nolint:forbidigo // We want to print to stdout
+				"\nGracefully shutting down. Press Ctrl+C again to force quit\n",
+			)
 			cancel()
 		}
 	}()

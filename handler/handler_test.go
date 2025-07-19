@@ -98,7 +98,12 @@ func TestWebfingerHandler(t *testing.T) {
 			ctx = log.WithLogger(ctx, l)
 
 			// Create a new request
-			r, _ := http.NewRequestWithContext(ctx, tc.alternateMethod, "/.well-known/webfinger?resource="+tc.resource, http.NoBody)
+			r, _ := http.NewRequestWithContext(
+				ctx,
+				tc.alternateMethod,
+				"/.well-known/webfinger?resource="+tc.resource,
+				http.NoBody,
+			)
 
 			// Create a new response
 			w := httptest.NewRecorder()
