@@ -169,7 +169,7 @@ func BenchmarkWebfingerHandler(b *testing.B) {
 	h := handler.WebfingerHandler(fingers)
 	r := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:user@example.com", http.NoBody)
 
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		w := httptest.NewRecorder()
 
 		h.ServeHTTP(w, r)
