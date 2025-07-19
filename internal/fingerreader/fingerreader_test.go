@@ -14,7 +14,9 @@ import (
 	"git.maronato.dev/maronato/finger/webfingers"
 )
 
-func newTempFile(t *testing.T, content string) (name string, remove func()) {
+type tempFileCleanup func()
+
+func newTempFile(t *testing.T, content string) (string, tempFileCleanup) {
 	t.Helper()
 
 	f, err := os.CreateTemp(t.TempDir(), "finger-test")
