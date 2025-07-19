@@ -1,6 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:best-practices"
+    "config:best-practices",
+    ":label(renovate)",
+    ":assignAndReview(linuxdaemon)",
+    ":configMigration",
+    ":separateMajorReleases",
+    ":separateMultipleMajorReleases",
+    ":separateMultipleMinorReleases",
+    ":separatePatchReleases",
+    "docker:pinDigests",
+    "helpers:pinGitHubActionDigests"
   ]
 }
