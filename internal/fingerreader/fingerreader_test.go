@@ -3,9 +3,10 @@ package fingerreader_test
 import (
 	"context"
 	"os"
-	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/fingerreader"
@@ -17,31 +18,21 @@ func newTempFile(t *testing.T, content string) (name string, remove func()) {
 	t.Helper()
 
 	f, err := os.CreateTemp(t.TempDir(), "finger-test")
-	if err != nil {
-		t.Fatalf("error creating temp file: %v", err)
-	}
+	require.NoError(t, err)
 
 	_, err = f.WriteString(content)
-	if err != nil {
-		t.Fatalf("error writing to temp file: %v", err)
-	}
+	require.NoError(t, err)
 
 	return f.Name(), func() {
 		err = os.Remove(f.Name())
-		if err != nil {
-			t.Fatalf("error removing temp file: %v", err)
-		}
+		require.NoError(t, err)
 	}
 }
 
 func TestNewFingerReader(t *testing.T) {
 	t.Parallel()
 
-	f := fingerreader.NewFingerReader()
-
-	if f == nil {
-		t.Errorf("NewFingerReader() = %v, want: %v", f, nil)
-	}
+	require.NotNil(t, fingerreader.NewFingerReader())
 }
 
 func TestFingerReader_ReadFiles(t *testing.T) {
@@ -110,22 +101,12 @@ func TestFingerReader_ReadFiles(t *testing.T) {
 			f := fingerreader.NewFingerReader()
 
 			err := f.ReadFiles(cfg)
-			if err != nil {
-				if !tc.wantErr {
-					t.Errorf("ReadFiles() error = %v", err)
-				}
-
-				return
-			} else if tc.wantErr {
-				t.Errorf("ReadFiles() error = %v, wantErr %v", err, tc.wantErr)
-			}
-
-			if !reflect.DeepEqual(f.URNSFile, []byte(tc.urnsContent)) {
-				t.Errorf("ReadFiles() URNsFile = %v, want: %v", f.URNSFile, tc.urnsContent)
-			}
-
-			if !reflect.DeepEqual(f.FingersFile, []byte(tc.fingersContent)) {
-				t.Errorf("ReadFiles() FingersFile = %v, want: %v", f.FingersFile, tc.fingersContent)
+			if tc.wantErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+				require.Equal(t, []byte(tc.urnsContent), f.URNSFile)
+				require.Equal(t, []byte(tc.fingersContent), f.FingersFile)
 			}
 		})
 	}
@@ -224,18 +205,14 @@ func TestReadFingerFile(t *testing.T) {
 			f.URNSFile = []byte(tc.urnsContent)
 
 			got, err := f.ReadFingerFile(ctx)
-			if err != nil {
-				if !tc.wantErr {
-					t.Errorf("ReadFingerFile() error = %v", err)
+			if tc.wantErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+
+				if tc.returns != nil {
+					require.Equal(t, tc.returns, got)
 				}
-
-				return
-			} else if tc.wantErr {
-				t.Errorf("ReadFingerFile() error = %v, wantErr %v", err, tc.wantErr)
-			}
-
-			if tc.returns != nil && !reflect.DeepEqual(got, tc.returns) {
-				t.Errorf("ReadFingerFile() got = %v, want: %v", got, tc.returns)
 			}
 		})
 	}

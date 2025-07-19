@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/log"
 	"git.maronato.dev/maronato/finger/internal/middleware"
@@ -46,13 +48,8 @@ func TestRecoverer(t *testing.T) {
 			h.ServeHTTP(w, r)
 		})
 
-		if w.Code != http.StatusInternalServerError {
-			t.Error("status is not 500")
-		}
-
-		if w.Body.String() != "Internal Server Error\n" {
-			t.Error("response body is not 'Internal Server Error'")
-		}
+		require.Equal(t, http.StatusInternalServerError, w.Code)
+		require.Equal(t, "Internal Server Error\n", w.Body.String())
 	})
 
 	t.Run("handles successful requests", func(t *testing.T) {
@@ -69,8 +66,6 @@ func TestRecoverer(t *testing.T) {
 			h.ServeHTTP(w, r)
 		})
 
-		if w.Code != http.StatusOK {
-			t.Error("status is not 200")
-		}
+		require.Equal(t, http.StatusOK, w.Code)
 	})
 }

@@ -3,6 +3,8 @@ package config_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"git.maronato.dev/maronato/finger/internal/config"
 )
 
@@ -35,9 +37,7 @@ func TestConfig_GetAddr(t *testing.T) {
 			t.Parallel()
 
 			got := tc.cfg.GetAddr()
-			if got != tc.want {
-				t.Errorf("Config.GetAddr() = %v, want %v", got, tc.want)
-			}
+			require.Equal(t, tc.want, got)
 		})
 	}
 }
@@ -116,9 +116,7 @@ func TestConfig_Validate(t *testing.T) {
 			t.Parallel()
 
 			err := tc.cfg.Validate()
-			if (err != nil) != tc.wantErr {
-				t.Errorf("Config.Validate() error = %v, wantErr %v", err, tc.wantErr)
-			}
+			require.Equal(t, tc.wantErr, err != nil)
 		})
 	}
 }

@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/log"
 )
@@ -14,7 +16,7 @@ func assertPanic(t *testing.T, f func()) {
 
 	defer func() {
 		if r := recover(); r == nil {
-			t.Errorf("The code did not panic")
+			t.Error("The code did not panic")
 		}
 	}()
 
@@ -36,16 +38,12 @@ func TestNewLogger(t *testing.T) {
 		// It shouldn't log debug messages
 		l.Debug("test")
 
-		if w.String() != "" {
-			t.Error("logger logged debug message")
-		}
+		require.Empty(t, w.String())
 
 		// It should log info messages
 		l.Info("test")
 
-		if w.String() == "" {
-			t.Error("logger did not log info message")
-		}
+		require.NotEmpty(t, w.String())
 	})
 
 	t.Run("logs debug messages if debug is enabled", func(t *testing.T) {
@@ -60,9 +58,7 @@ func TestNewLogger(t *testing.T) {
 		// It should log debug messages
 		l.Debug("test")
 
-		if w.String() == "" {
-			t.Error("logger did not log debug message")
-		}
+		require.NotEmpty(t, w.String())
 	})
 }
 
@@ -88,8 +84,6 @@ func TestFromContext(t *testing.T) {
 
 		l2 := log.FromContext(ctx)
 
-		if l2 == nil {
-			t.Error("logger is nil")
-		}
+		require.NotNil(t, l2)
 	})
 }

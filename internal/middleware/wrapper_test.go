@@ -6,6 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"git.maronato.dev/maronato/finger/internal/middleware"
 )
 
@@ -15,9 +17,7 @@ func TestWrapResponseWriter(t *testing.T) {
 	w := httptest.NewRecorder()
 	wrapped := middleware.WrapResponseWriter(w)
 
-	if wrapped == nil {
-		t.Error("wrapper is nil")
-	}
+	require.NotNil(t, wrapped)
 }
 
 func TestResponseWrapper_Status(t *testing.T) {
@@ -26,15 +26,11 @@ func TestResponseWrapper_Status(t *testing.T) {
 	w := httptest.NewRecorder()
 	wrapped := middleware.WrapResponseWriter(w)
 
-	if wrapped.Status() != 0 {
-		t.Error("status is not 0")
-	}
+	require.Equal(t, 0, wrapped.Status())
 
 	wrapped.WriteHeader(http.StatusOK)
 
-	if wrapped.Status() != http.StatusOK {
-		t.Error("status is not 200")
-	}
+	require.Equal(t, http.StatusOK, wrapped.Status())
 }
 
 type FailWriter struct{}
@@ -59,17 +55,11 @@ func TestResponseWrapper_Write(t *testing.T) {
 		wrapped := middleware.WrapResponseWriter(w)
 
 		size, err := wrapped.Write([]byte("test"))
-		if err != nil {
-			t.Errorf("error writing response: %v", err)
-		}
+		require.NoError(t, err)
 
-		if size != 4 {
-			t.Error("size is not 4")
-		}
+		require.Equal(t, 4, size)
 
-		if wrapped.Status() != http.StatusOK {
-			t.Error("status is not 200")
-		}
+		require.Equal(t, http.StatusOK, wrapped.Status())
 	})
 
 	t.Run("returns error on fail write", func(t *testing.T) {
@@ -79,9 +69,7 @@ func TestResponseWrapper_Write(t *testing.T) {
 		wrapped := middleware.WrapResponseWriter(w)
 
 		_, err := wrapped.Write([]byte("test"))
-		if err == nil {
-			t.Error("error is nil")
-		}
+		require.Error(t, err)
 	})
 }
 
@@ -91,7 +79,5 @@ func TestResponseWrapper_Unwrap(t *testing.T) {
 	w := httptest.NewRecorder()
 	wrapped := middleware.WrapResponseWriter(w)
 
-	if wrapped.Unwrap() != w {
-		t.Error("unwrapped response is not the same")
-	}
+	require.Equal(t, w, wrapped.Unwrap())
 }

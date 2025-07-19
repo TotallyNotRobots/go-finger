@@ -5,10 +5,11 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	"git.maronato.dev/maronato/finger/handler"
 	"git.maronato.dev/maronato/finger/internal/config"
@@ -114,25 +115,18 @@ func TestWebfingerHandler(t *testing.T) {
 			// Serve the request
 			h.ServeHTTP(w, r)
 
-			// Check the status code
-			if w.Code != tc.wantCode {
-				t.Errorf("expected status code %d, got %d", tc.wantCode, w.Code)
-			}
+			require.Equal(t, tc.wantCode, w.Code)
 
 			// If the status code is 200, check the response body
 			if tc.wantCode == http.StatusOK {
 				// Check the content type
-				if w.Header().Get("Content-Type") != "application/jrd+json" {
-					t.Errorf("expected content type %s, got %s", "application/jrd+json", w.Header().Get("Content-Type"))
-				}
+				require.Equal(t, "application/jrd+json", w.Header().Get("Content-Type"))
 
 				fingerWant := fingers[tc.resource]
 				fingerGot := &webfingers.WebFinger{}
 
 				// Decode the response body
-				if err := json.NewDecoder(w.Body).Decode(fingerGot); err != nil {
-					t.Errorf("error decoding json: %v", err)
-				}
+				require.NoError(t, json.NewDecoder(w.Body).Decode(fingerGot))
 
 				//  Sort links
 
@@ -145,9 +139,7 @@ func TestWebfingerHandler(t *testing.T) {
 				})
 
 				// Check the response body
-				if !reflect.DeepEqual(fingerGot, fingerWant) {
-					t.Errorf("expected body %v, got %v", fingerWant, fingerGot)
-				}
+				require.Equal(t, fingerWant, fingerGot)
 			}
 		})
 	}
@@ -162,9 +154,7 @@ func BenchmarkWebfingerHandler(b *testing.B) {
 		},
 		nil,
 	)
-	if err != nil {
-		b.Fatal(err)
-	}
+	require.NoError(b, err)
 
 	h := handler.WebfingerHandler(fingers)
 	r := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:user@example.com", http.NoBody)
@@ -174,8 +164,6 @@ func BenchmarkWebfingerHandler(b *testing.B) {
 
 		h.ServeHTTP(w, r)
 
-		if w.Code != http.StatusOK {
-			b.Errorf("expected status code %d, got %d", http.StatusOK, w.Code)
-		}
+		require.Equal(b, http.StatusOK, w.Code)
 	}
 }

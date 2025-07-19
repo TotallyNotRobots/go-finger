@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/log"
 	"git.maronato.dev/maronato/finger/internal/server"
@@ -34,7 +36,5 @@ func TestHealthcheckHandler(t *testing.T) {
 	h.ServeHTTP(rec, req)
 
 	// Check the status code
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status code %d, got %d", http.StatusOK, rec.Code)
-	}
+	require.Equal(t, http.StatusOK, rec.Code)
 }

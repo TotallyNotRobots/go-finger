@@ -1,10 +1,10 @@
 package webfingers_test
 
 import (
-	"encoding/json"
-	"reflect"
 	"sort"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	"git.maronato.dev/maronato/finger/webfingers"
 )
@@ -196,15 +196,7 @@ func TestNewWebFingers(t *testing.T) {
 			t.Parallel()
 
 			got, err := webfingers.NewWebFingers(tc.resources, tc.urnAliases)
-			if err != nil {
-				if !tc.wantErr {
-					t.Errorf("unexpected error: %v", err)
-				}
-
-				return
-			} else if tc.wantErr {
-				t.Error("expected error, got nil")
-			}
+			require.Equal(t, tc.wantErr, err != nil)
 
 			// Sort the links.
 			for _, finger := range got {
@@ -219,13 +211,7 @@ func TestNewWebFingers(t *testing.T) {
 				})
 			}
 
-			if !reflect.DeepEqual(got, tc.want) {
-				// Marshall both so we can visualize the differences.
-				gotJSON, _ := json.MarshalIndent(got, "", "  ")
-				wantJSON, _ := json.MarshalIndent(tc.want, "", "  ")
-
-				t.Errorf("got:\n%s\nwant:\n%s", gotJSON, wantJSON)
-			}
+			require.Equal(t, tc.want, got)
 		})
 	}
 }

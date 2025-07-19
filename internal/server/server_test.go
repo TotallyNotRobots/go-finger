@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"reflect"
 	"strings"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/log"
@@ -52,9 +54,7 @@ func TestStartServer(t *testing.T) {
 
 		// Start the server
 		err := server.StartServer(ctx, cfg, nil)
-		if err != nil {
-			t.Errorf("expected no error, got %v", err)
-		}
+		require.NoError(t, err)
 	})
 
 	t.Run("fails to start", func(t *testing.T) {
@@ -76,9 +76,7 @@ func TestStartServer(t *testing.T) {
 
 		// Start the server
 		err := server.StartServer(ctx, cfg, nil)
-		if err == nil {
-			t.Errorf("expected error, got nil")
-		}
+		require.Error(t, err)
 	})
 
 	t.Run("serves webfinger", func(t *testing.T) {
@@ -108,9 +106,7 @@ func TestStartServer(t *testing.T) {
 		go func() {
 			// Start the server
 			err := server.StartServer(ctx, cfg, fingers)
-			if err != nil {
-				t.Errorf("expected no error, got %v", err)
-			}
+			assert.NoError(t, err)
 		}()
 
 		// Wait for the server to start
@@ -128,31 +124,23 @@ func TestStartServer(t *testing.T) {
 
 		// Send the request
 		resp, err := c.Do(r)
-		if err != nil {
-			t.Errorf("expected no error, got %v", err)
-		}
+		require.NoError(t, err)
 
 		defer resp.Body.Close()
 
 		// Check the status code
-		if resp.StatusCode != http.StatusOK {
-			t.Errorf("expected status code %d, got %d", http.StatusOK, resp.StatusCode)
-		}
+		require.Equal(t, http.StatusOK, resp.StatusCode)
 
 		// Check the response body
 		fingerGot := &webfingers.WebFinger{}
 
 		// Decode the response body
-		if err := json.NewDecoder(resp.Body).Decode(fingerGot); err != nil {
-			t.Errorf("error decoding json: %v", err)
-		}
+		require.NoError(t, json.NewDecoder(resp.Body).Decode(fingerGot))
 
 		// Check the response body
 		fingerWant := fingers[resource]
 
-		if !reflect.DeepEqual(fingerGot, fingerWant) {
-			t.Errorf("expected %v, got %v", fingerWant, fingerGot)
-		}
+		require.Equal(t, fingerWant, fingerGot)
 	})
 
 	t.Run("serves healthcheck", func(t *testing.T) {
@@ -172,9 +160,7 @@ func TestStartServer(t *testing.T) {
 		go func() {
 			// Start the server
 			err := server.StartServer(ctx, cfg, nil)
-			if err != nil {
-				t.Errorf("expected no error, got %v", err)
-			}
+			assert.NoError(t, err)
 		}()
 
 		// Wait for the server to start
@@ -192,15 +178,11 @@ func TestStartServer(t *testing.T) {
 
 		// Send the request
 		resp, err := c.Do(r)
-		if err != nil {
-			t.Errorf("expected no error, got %v", err)
-		}
+		require.NoError(t, err)
 
 		defer resp.Body.Close()
 
 		// Check the status code
-		if resp.StatusCode != http.StatusOK {
-			t.Errorf("expected status code %d, got %d", http.StatusOK, resp.StatusCode)
-		}
+		require.Equal(t, http.StatusOK, resp.StatusCode)
 	})
 }

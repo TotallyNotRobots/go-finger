@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/log"
 	"git.maronato.dev/maronato/finger/internal/middleware"
@@ -26,19 +28,12 @@ func TestRequestLogger(t *testing.T) {
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequestWithContext(ctx, http.MethodGet, "/", http.NoBody)
 
-	if stdout.String() != "" {
-		t.Error("logger logged before request")
-	}
+	require.Empty(t, stdout.String())
 
 	middleware.RequestLogger(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})).ServeHTTP(w, r)
 
-	if w.Code != http.StatusOK {
-		t.Error("status is not 200")
-	}
-
-	if stdout.String() == "" {
-		t.Error("logger did not log request")
-	}
+	require.Equal(t, http.StatusOK, w.Code)
+	require.NotEmpty(t, stdout.String())
 }
