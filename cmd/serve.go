@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/peterbourgon/ff/v4"
+
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/fingerreader"
 	"git.maronato.dev/maronato/finger/internal/log"
 	"git.maronato.dev/maronato/finger/internal/server"
-	"github.com/peterbourgon/ff/v4"
 )
 
 const appName = "finger"

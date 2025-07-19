@@ -7,8 +7,9 @@ import (
 	"net/url"
 	"time"
 
-	"git.maronato.dev/maronato/finger/internal/config"
 	"github.com/peterbourgon/ff/v4"
+
+	"git.maronato.dev/maronato/finger/internal/config"
 )
 
 func newHealthcheckCmd(cfg *config.Config) *ff.Command {

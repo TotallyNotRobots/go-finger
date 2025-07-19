@@ -44,7 +44,6 @@ linters:
     generated: disable
 formatters:
   enable:
-    - gci
     - gofmt
     - gofumpt
     - goimports
@@ -59,3 +58,6 @@ formatters:
       shorten-comments: true
       reformat-tags: true
       chain-split-dots: true
+    goimports:
+      local-prefixes:
+        - git.maronato.dev/maronato/finger

@@ -8,12 +8,13 @@ import (
 	"net/http"
 	"time"
 
+	"golang.org/x/sync/errgroup"
+
 	"git.maronato.dev/maronato/finger/handler"
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/log"
 	"git.maronato.dev/maronato/finger/internal/middleware"
 	"git.maronato.dev/maronato/finger/webfingers"
-	"golang.org/x/sync/errgroup"
 )
 
 const (
