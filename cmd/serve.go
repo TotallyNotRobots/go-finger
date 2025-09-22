@@ -27,6 +27,7 @@ func newServerCmd(cfg *config.Config) *ff.Command {
 
 			// Read the webfinger files
 			r := fingerreader.NewFingerReader()
+
 			err := r.ReadFiles(cfg)
 			if err != nil {
 				return fmt.Errorf("error reading finger files: %w", err)
