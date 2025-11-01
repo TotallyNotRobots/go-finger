@@ -3,6 +3,7 @@
   "extends": [
     "github>TotallyNotRobots/renovate-config"
   ],
+  "forkProcessing": "enabled",
   "packageRules": [
     {
       "matchManagers": ["gomod"],
