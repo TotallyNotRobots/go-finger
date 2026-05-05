@@ -8,7 +8,10 @@ linters:
     - exhaustruct
     - fatcontext
     - funlen
+    - goconst
+    - gomodguard
     - lll
+    - noctx
     - noinlineerr
     - nolintlint
     - perfsprint
