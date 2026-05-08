@@ -1,6 +1,6 @@
 module git.maronato.dev/maronato/finger
 
-go 1.25.5
+go 1.25.10
 
 require (
 	github.com/peterbourgon/ff/v4 v4.0.0-beta.1
