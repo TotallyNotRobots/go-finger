@@ -6,6 +6,7 @@ linters:
     - depguard
     - errcheck
     - exhaustruct
+    - exhaustruct_v5
     - fatcontext
     - funlen
     - goconst
