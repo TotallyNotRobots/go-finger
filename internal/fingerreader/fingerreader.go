@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"os"
 
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 
 	"git.maronato.dev/maronato/finger/internal/config"
 	"git.maronato.dev/maronato/finger/internal/log"
